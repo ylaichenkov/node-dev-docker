@@ -23,6 +23,14 @@ RUN npm install -g \
     webdriver-manager && \
     webdriver-manager update
 
+ENV PROXY=http://proxy.evry.com:8080 \
+	proxy=http://proxy.evry.com:8080 \
+	HTTPS_PROXY=http://proxy.evry.com:8080 \
+	https_proxy=http://proxy.evry.com:8080 \
+	NO_PROXY=localhost,.evry.com,.finods.com,.localdomain,.cosng.net \
+	CHROME_BIN=/usr/bin/google-chrome 
+
+
 COPY gosu-entrypoint.sh showversions.sh /
 #RUN chmod +x /gosu-entrypoint.sh && \
 #	/showversions.sh
