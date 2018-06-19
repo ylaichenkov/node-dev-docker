@@ -11,7 +11,7 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
 	rm -rf /var/cache/apt && \
 	arch="$(dpkg --print-architecture | awk -F- '{ print $NF }')" && \
 	wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/1.10/gosu-$arch" && \
-	chmod a+x /usr/local/bin/gosu && 
+	chmod a+x /usr/local/bin/gosu
 
 ENV CHROME_BIN=/usr/bin/google-chrome \
 	GOSU_USER="0:0" \
@@ -21,7 +21,7 @@ RUN npm install -g \
     npm \
     protractor \
     webdriver-manager && \
-    webdriver-manager update && \
+    webdriver-manager update
 
 COPY gosu-entrypoint.sh showversions.sh /
 #RUN chmod +x /gosu-entrypoint.sh && \
