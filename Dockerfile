@@ -11,14 +11,9 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
 	rm -rf /var/cache/apt && \
 	arch="$(dpkg --print-architecture | awk -F- '{ print $NF }')" && \
 	wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/1.10/gosu-$arch" && \
-	chmod a+x /usr/local/bin/gosu && \
-	wget https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_CLI_VERSION}-linux.zip -O /tmp/sonar.zip && \
-	mkdir -p /home/node/.sonar/native-sonar-scanner && \
-	unzip /tmp/sonar.zip -d /home/node/.sonar/native-sonar-scanner && \
-	rm /tmp/sonar.zip
+	chmod a+x /usr/local/bin/gosu && 
 
 ENV CHROME_BIN=/usr/bin/google-chrome \
-	PATH="/opt/firefox:/usr/local/dependency-check/bin:${PATH}" \
 	GOSU_USER="0:0" \
 	GOSU_CHOWN="/home/node /usr/local/dependency-check/data" 
 
@@ -27,8 +22,6 @@ RUN npm install -g \
     protractor \
     webdriver-manager && \
     webdriver-manager update && \
-	chown -R node:node /home/node /usr/local/dependency-check/data && \
-	chmod -R a+w /usr/local/dependency-check/data
 
 COPY gosu-entrypoint.sh showversions.sh /
 #RUN chmod +x /gosu-entrypoint.sh && \
