@@ -13,7 +13,6 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
 	wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/1.10/gosu-$arch" && \
 	chmod a+x /usr/local/bin/gosu && \
 	wget -q -O - "https://download.mozilla.org/?product=firefox-latest-ssl&os=linux64" |tar xjv -C /opt && \
-	yarn global add @angular/cli@${ANGULAR_CLI_VERSION} sonarqube-scanner@latest stylelint && \
 	ng set --global packageManager=yarn && \
 	wget http://dl.bintray.com/jeremy-long/owasp/dependency-check-${OWASP_DEPENDENCY_CHECK_VERSION}-release.zip -O /tmp/owasp-dep-check.zip && \
 	unzip /tmp/owasp-dep-check.zip -d /usr/local && \
@@ -23,29 +22,16 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
 	unzip /tmp/sonar.zip -d /home/node/.sonar/native-sonar-scanner && \
 	rm /tmp/sonar.zip
 
-ENV PROXY=http://proxy.evry.com:8080 \
-	proxy=http://proxy.evry.com:8080 \
-	HTTPS_PROXY=http://proxy.evry.com:8080 \
-	https_proxy=http://proxy.evry.com:8080 \
-	NO_PROXY=localhost,.evry.com,.finods.com,.localdomain,.cosng.net \
-	NPM_REGISTRY=https://fsnexus.evry.com/nexus/repository/npm-all/ \
-	CHROME_BIN=/usr/bin/google-chrome \
-	NPM_CONFIG_PREFIX=/home/node/.npm-global \
+ENV CHROME_BIN=/usr/bin/google-chrome \
 	PATH="/opt/firefox:/usr/local/dependency-check/bin:${PATH}" \
 	GOSU_USER="0:0" \
-	GOSU_CHOWN="/home/node /usr/local/dependency-check/data" \
-	PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
-	JAVA_HOME=/home/node/.sonar/native-sonar-scanner/sonar-scanner-${SONAR_CLI_VERSION}-linux/jre
+	GOSU_CHOWN="/home/node /usr/local/dependency-check/data" 
 
 RUN npm install -g \
     npm \
     protractor \
     webdriver-manager && \
-    webdriver-manager update
-
-RUN	/usr/local/dependency-check/bin/dependency-check.sh --updateonly && \
-	npm set registry ${NPM_REGISTRY} && \
-	yarn config set registry ${NPM_REGISTRY} && \
+    webdriver-manager update && \
 	chown -R node:node /home/node /usr/local/dependency-check/data && \
 	chmod -R a+w /usr/local/dependency-check/data
 
