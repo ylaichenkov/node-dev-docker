@@ -21,6 +21,7 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
 	wget https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_CLI_VERSION}-linux.zip -O /tmp/sonar.zip && \
 	mkdir -p /home/node/.sonar/native-sonar-scanner && \
 	unzip /tmp/sonar.zip -d /home/node/.sonar/native-sonar-scanner && \
+	npm run 
 	rm /tmp/sonar.zip
 
 ENV PROXY=http://proxy.evry.com:8080 \
@@ -36,6 +37,12 @@ ENV PROXY=http://proxy.evry.com:8080 \
 	GOSU_CHOWN="/home/node /usr/local/dependency-check/data" \
 	PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
 	JAVA_HOME=/home/node/.sonar/native-sonar-scanner/sonar-scanner-${SONAR_CLI_VERSION}-linux/jre
+
+RUN npm install -g \
+    npm \
+    protractor \
+    webdriver-manager && \
+    webdriver-manager update
 
 RUN	/usr/local/dependency-check/bin/dependency-check.sh --updateonly && \
 	npm set registry ${NPM_REGISTRY} && \
